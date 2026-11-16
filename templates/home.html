@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% from "_macros.html" import package_card, dest_tile %}
+{% block content %}
+<header class="hero">
+  <div class="slide on" data-cap="Taj Mahal, Agra"><img src="{{ url_for('static', filename='img/taj.jpg') }}" alt="" fetchpriority="high" decoding="async"></div>
+  <div class="slide" data-cap="Kerala backwaters"><img src="{{ url_for('static', filename='img/kerala.jpg') }}" alt="" loading="lazy"></div>
+  <div class="slide" data-cap="Leh, Ladakh"><img src="{{ url_for('static', filename='img/ladakh.avif') }}" alt="" loading="lazy"></div>
+  <div class="wrap">
+    <div class="hero-c">
+      <p class="eyebrow">India, planned with care</p>
+      <h1>Every journey has a story. Let's write yours.</h1>
+      <p class="lead">Hand-planned trips across India with checked stays, local guides and one person you can reach from booking to drop.</p>
+      <div class="acts">
+        <a class="btn btn-gold btn-arrow" href="{{ url_for('packages') }}">Explore packages</a>
+        <a class="btn btn-ghost btn-arrow" href="{{ url_for('contact') }}">Build a custom trip</a>
+      </div>
+      <dl class="hero-facts">
+        <div><dt>{{ stats.packages }}</dt><dd>ready packages</dd></div>
+        <div><dt>{{ stats.destinations }}</dt><dd>destinations</dd></div>
+        <div><dt>30%</dt><dd>advance to book</dd></div>
+      </dl>
+    </div>
+  </div>
+  <p class="slide-cap" aria-hidden="true"><span id="slide-cap">Taj Mahal, Agra</span></p>
+</header>
+
+<div class="wrap">
+  <form class="search" action="{{ url_for('packages') }}" method="get" role="search">
+    <div>
+      <label for="hq">Where to?</label>
+      <input id="hq" name="q" placeholder="Kerala, Ladakh, Jaipur">
+    </div>
+    <div>
+      <label for="hc">Trip style</label>
+      <select id="hc" name="cat">
+        <option value="">Any style</option>
+        {% for key, label in categories %}<option value="{{ key }}">{{ label }}</option>{% endfor %}
+      </select>
+    </div>
+    <button class="btn btn-ink" style="height: 48px">Search trips</button>
+  </form>
+</div>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="head"><h2>Popular packages</h2><a class="link" href="{{ url_for('packages') }}">See all packages</a></div>
+    <div class="grid grid-3">
+      {% for p in featured %}{{ package_card(p) }}{% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="head"><h2>Where do you want to go?</h2><a class="link" href="{{ url_for('destinations') }}">All destinations</a></div>
+    <div class="mosaic">
+      {% for d in tiles %}{{ dest_tile(d) }}{% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <h2 style="margin-bottom: 26px">Why travel with NK Journeys</h2>
+    <div class="why-g">
+      <div class="why"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.5"/></svg></span><h3>Clear prices</h3><p>The fare, GST and total are shown before you pay. No surprises at checkout.</p></div>
+      <div class="why"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></span><h3>Pay 30% to book</h3><p>Hold your dates with a 30% advance and pay the rest a week before travel.</p></div>
+      <div class="why"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6 7-11a7 7 0 10-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span><h3>Plans that breathe</h3><p>Itineraries avoid rushed drives, and we tell you when a leg is too tight.</p></div>
+      <div class="why"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14v-2a8 8 0 0116 0v2"/><rect x="3" y="14" width="4" height="6" rx="2"/><rect x="17" y="14" width="4" height="6" rx="2"/></svg></span><h3>Help when you need it</h3><p>A contact on call during the trip, and a booking guide for everything before it.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <h2 style="margin-bottom: 26px">Booked in three steps</h2>
+    <div class="steps">
+      <div class="step"><b>1</b><h3>Pick or customise</h3><p>Choose a ready package, or tell us your dates, budget and mood.</p></div>
+      <div class="step"><b>2</b><h3>Pay in full or 30%</h3><p>Secure your dates by UPI, card, net banking or wallet. Prices show GST upfront.</p></div>
+      <div class="step"><b>3</b><h3>Travel with support</h3><p>Get your voucher, pickup details and a number to call during the trip.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="cta">
+      <h2>Not sure where to go? Tell us your mood.</h2>
+      <p>Share your dates and budget and we will suggest a plan.</p>
+      <a class="btn btn-ink btn-arrow" href="{{ url_for('contact') }}">Ask for a custom plan</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% from "_macros.html" import photo %}
+{% block title %}{{ p.name }} | NK Journeys{% endblock %}
+{% block description %}{{ p.name }}: {{ p.days }} days and {{ p.nights }} nights in {{ dest.name }}. {{ p.summary }}{% endblock %}
+{% block content %}
+<div class="wrap">
+  <div class="page-h">
+    <p class="meta"><a href="{{ url_for('packages', dest=dest.id) }}"><u>{{ dest.name }}</u></a></p>
+    <h1 style="font-size: clamp(32px, 4vw, 48px)">{{ p.name }}</h1>
+    <p>{{ p.days }} days and {{ p.nights }} nights. {{ p.summary }}</p>
+  </div>
+  <div class="two">
+    <div>
+      {{ photo(p.img, "cover") }}
+      <section class="panel"><h2>Trip highlights</h2>
+        <ul class="lst tick">{% for h in p.highlights %}<li>{{ h }}</li>{% endfor %}</ul>
+      </section>
+      <section class="panel"><h2>Day-by-day plan</h2>
+        {% for day in p.itinerary %}
+        <details{% if loop.first %} open{% endif %}><summary>Day {{ loop.index }}: {{ day.title }}</summary><p>{{ day.text }}</p></details>
+        {% endfor %}
+      </section>
+      <section class="panel">
+        <div class="row">
+          <div><h3>What's included</h3><ul class="lst tick">{% for x in inclusions %}<li>{{ x }}</li>{% endfor %}</ul></div>
+          <div><h3>What's not included</h3><ul class="lst cross">{% for x in exclusions %}<li>{{ x }}</li>{% endfor %}</ul></div>
+        </div>
+      </section>
+      <section class="panel"><h2>Good to know</h2>
+        <ul class="lst">
+          <li>Best time to visit {{ dest.name }}: {{ dest.best }}.</li>
+          <li>Free date change up to 15 days before departure. See the <a href="{{ url_for('cancellation') }}"><u>cancellation policy</u></a>.</li>
+          <li>Need a different hotel category or fewer days? <a href="{{ url_for('contact', trip=p.name) }}"><u>Ask for a custom plan</u></a>.</li>
+        </ul>
+      </section>
+    </div>
+    <aside class="panel sticky">
+      <p class="mut" style="margin: 0">From</p>
+      <h2 style="margin: 0 0 4px">{{ p.price|inr_rupees }}</h2>
+      <p class="mut" style="margin: 0 0 18px">per adult, GST extra (5%)</p>
+      <form action="{{ url_for('book', package_id=p.id) }}" method="get">
+        <div class="f"><label for="dt">Travel date</label><input id="dt" name="date" type="date" min="{{ min_date }}" value="{{ default_date }}" required></div>
+        <div class="f"><label for="ad">Adults</label>
+          <select id="ad" name="adults">{% for n in range(1, 9) %}<option{% if n == 2 %} selected{% endif %}>{{ n }}</option>{% endfor %}</select>
+        </div>
+        <button class="btn btn-gold btn-block">Book this trip</button>
+      </form>
+      <p class="mut" style="font-size: 14px; margin: 14px 0 0">No payment yet. You review everything on the next page. <a href="{{ url_for('contact', trip=p.name) }}"><u>Have a question?</u></a></p>
+    </aside>
+  </div>
+</div>
+{% endblock %}

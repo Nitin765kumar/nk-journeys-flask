@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Booking {{ b.ref }} | NK Journeys{% endblock %}
+{% block seo %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+{% block content %}
+<div class="wrap">
+  <div class="page-h">
+    <h1 style="font-size: clamp(30px, 4vw, 44px)">{% if b.status == 'Cancelled' %}Booking cancelled{% else %}Booking confirmed{% endif %}</h1>
+    <p>Step 3 of 3. Your booking ID is <b>{{ b.ref }}</b>. Save this voucher.</p>
+  </div>
+  <div class="two">
+    <div class="voucher">
+      <h2>{{ b.package_name }}</h2>
+      <dl>
+        <dt>Booking ID</dt><dd>{{ b.ref }}</dd>
+        <dt>Status</dt><dd>{{ b.status }}</dd>
+        {% if payment %}<dt>Payment ID</dt><dd>{{ payment.payment_id }}</dd>{% endif %}
+        <dt>Travel date</dt><dd>{{ b.travel_date|fmt_date }}</dd>
+        <dt>Lead traveller</dt><dd>{{ b.name }}, {{ b.phone }}</dd>
+        <dt>Travellers</dt><dd>{{ b.travellers|join(', ') }}</dd>
+        {% if payment %}<dt>Paid</dt><dd>{{ payment.amount|inr }} by {{ payment.method }}{% if payment.last4 %} ending {{ payment.last4 }}{% endif %} on {{ payment.created_at|fmt_date }}</dd>{% endif %}
+        <dt>Balance</dt><dd>{% if balance > 0 %}{{ balance|inr }} due by {{ due|fmt_date }}{% else %}Nil, paid in full{% endif %}</dd>
+      </dl>
+    </div>
+    <aside>
+      <section class="panel">
+        <h3>What happens next</h3>
+        <ul class="tl">
+          <li><b>Now:</b> keep this voucher. In a real booking you would also get it by email and SMS. This demo sends nothing.</li>
+          <li><b>{{ '7 days before' if balance > 0 else '3 days before' }}:</b> {{ 'pay the balance and receive pickup details.' if balance > 0 else 'receive pickup and hotel details.' }}</li>
+          <li><b>Day of travel:</b> carry a valid photo ID for every traveller.</li>
+        </ul>
+        <div class="noprint">
+          <button class="btn btn-ink btn-block" data-print>Print voucher</button>
+          <p style="margin: 12px 0 0"><a href="{{ url_for('packages') }}"><u>Explore more trips</u></a> or <a href="{{ url_for('support') }}"><u>get help</u></a>.</p>
+        </div>
+      </section>
+    </aside>
+  </div>
+</div>
+{% endblock %}

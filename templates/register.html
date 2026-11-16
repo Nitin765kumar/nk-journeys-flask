@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf_field %}
+{% block title %}Create an account | NK Journeys{% endblock %}
+{% block description %}Create an NK Journeys account to keep all your bookings in one place.{% endblock %}
+{% block seo %}<meta name="robots" content="noindex, follow">{% endblock %}
+{% block content %}
+<div class="wrap">
+  <form class="panel auth" method="post" novalidate>
+    {{ csrf_field() }}
+    <h1>Create an account</h1>
+    <p class="mut">Keep every booking in one place. You can still book without an account.</p>
+    {% if errors %}<div class="err" role="alert">{% for e in errors %}{{ e }}{% if not loop.last %}<br>{% endif %}{% endfor %}</div>{% endif %}
+    <div class="f"><label for="name">Full name</label><input id="name" name="name" value="{{ form.name }}" autocomplete="name" required></div>
+    <div class="f"><label for="email">Email</label><input id="email" name="email" type="email" value="{{ form.email }}" autocomplete="email" required></div>
+    <div class="f"><label for="phone">Mobile number</label><input id="phone" name="phone" value="{{ form.phone }}" inputmode="numeric" maxlength="10" autocomplete="tel" required></div>
+    <div class="f"><label for="password">Password (at least 8 characters)</label><input id="password" name="password" type="password" autocomplete="new-password" required></div>
+    <div class="f"><label for="confirm">Confirm password</label><input id="confirm" name="confirm" type="password" autocomplete="new-password" required></div>
+    <button class="btn btn-gold btn-block">Create account</button>
+    <p class="auth-alt">Already registered? <a href="{{ url_for('accounts.login', next=next) }}"><u>Log in</u></a></p>
+  </form>
+</div>
+{% endblock %}

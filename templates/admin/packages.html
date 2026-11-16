@@ -1,0 +1,15 @@
+{% extends "admin/base.html" %}
+{% block title %}Packages{% endblock %}
+{% block content %}
+<div class="head"><h1>Packages</h1><a class="btn btn-gold" href="{{ url_for('admin.package_new') }}">Add package</a></div>
+<section class="panel">
+  <div class="table-wrap"><table class="tbl">
+    <thead><tr><th>Name</th><th>Destination</th><th>Days</th><th>Price</th><th>Featured</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+      {% for p in items %}
+      <tr><td>{{ p.name }}<br><small class="mut">{{ p.id }}</small></td><td>{{ p.dest_name }}</td><td>{{ p.days }}</td><td>{{ p.price|inr_rupees }}</td><td>{{ 'Yes' if p.featured else '-' }}</td><td><span class="badge">{{ 'Active' if p.active else 'Hidden' }}</span></td><td><a href="{{ url_for('admin.package_edit', package_id=p.id) }}"><u>Edit</u></a></td></tr>
+      {% endfor %}
+    </tbody>
+  </table></div>
+</section>
+{% endblock %}

@@ -1,0 +1,442 @@
+{
+  "destinations": [
+    {
+      "id": "kerala",
+      "name": "Kerala",
+      "state": "South India",
+      "cats": [
+        "beaches",
+        "family",
+        "honeymoon"
+      ],
+      "img": "kerala.jpg",
+      "blurb": "Houseboats, tea hills and Ayurveda in the green south.",
+      "best": "Sep to Mar",
+      "sort_order": 0
+    },
+    {
+      "id": "ladakh",
+      "name": "Ladakh",
+      "state": "Jammu & Kashmir (UT)",
+      "cats": [
+        "mountains"
+      ],
+      "img": "ladakh.avif",
+      "blurb": "High passes, monasteries and turquoise lakes.",
+      "best": "May to Sep",
+      "sort_order": 1
+    },
+    {
+      "id": "rajasthan",
+      "name": "Rajasthan & Agra",
+      "state": "North India",
+      "cats": [
+        "heritage",
+        "family"
+      ],
+      "img": "agra.jpg",
+      "blurb": "Forts, palaces and the Taj Mahal on one route.",
+      "best": "Oct to Mar",
+      "sort_order": 2
+    },
+    {
+      "id": "goa",
+      "name": "Goa",
+      "state": "West Coast",
+      "cats": [
+        "beaches",
+        "honeymoon"
+      ],
+      "img": "goa.avif",
+      "blurb": "Easy beaches, old churches and sunset cafes.",
+      "best": "Nov to Feb",
+      "sort_order": 3
+    },
+    {
+      "id": "kashmir",
+      "name": "Kashmir",
+      "state": "Jammu & Kashmir (UT)",
+      "cats": [
+        "mountains",
+        "honeymoon"
+      ],
+      "img": "kashmir.jpg",
+      "blurb": "Shikara rides, meadows and snow in Gulmarg.",
+      "best": "Apr to Oct",
+      "sort_order": 4
+    },
+    {
+      "id": "rishikesh",
+      "name": "Rishikesh & Haridwar",
+      "state": "Uttarakhand",
+      "cats": [
+        "spiritual",
+        "mountains"
+      ],
+      "img": "rishikesh.jpg",
+      "blurb": "Ganga aarti, yoga and river rafting.",
+      "best": "Sep to Jun",
+      "sort_order": 5
+    },
+    {
+      "id": "ayodhya",
+      "name": "Ayodhya",
+      "state": "Uttar Pradesh",
+      "cats": [
+        "spiritual",
+        "family"
+      ],
+      "img": "ayodhya.jpg",
+      "blurb": "A calm pilgrimage with evening aarti on the Sarayu.",
+      "best": "Oct to Mar",
+      "sort_order": 6
+    },
+    {
+      "id": "darjeeling",
+      "name": "Darjeeling & Gangtok",
+      "state": "East Himalaya",
+      "cats": [
+        "mountains",
+        "family"
+      ],
+      "img": "darjeeling.avif",
+      "blurb": "Toy train, tea gardens and Kanchenjunga views.",
+      "best": "Mar to May, Oct to Dec",
+      "sort_order": 7
+    }
+  ],
+  "packages": [
+    {
+      "id": "kerala-6d",
+      "name": "Backwaters and Ayurveda",
+      "dest_id": "kerala",
+      "days": 6,
+      "nights": 5,
+      "price": 24500,
+      "cats": [
+        "beaches",
+        "family",
+        "honeymoon"
+      ],
+      "img": "kerala.jpg",
+      "summary": "Houseboat night, Munnar tea hills and an Ayurvedic massage.",
+      "highlights": [
+        "Private houseboat night in Alleppey",
+        "Tea estates and spice walks in Munnar",
+        "One Ayurvedic massage session"
+      ],
+      "itinerary": [
+        {
+          "title": "Arrive in Kochi",
+          "text": "Airport pickup, hotel check-in and an evening walk by the Chinese fishing nets."
+        },
+        {
+          "title": "Kochi to Munnar",
+          "text": "Drive through the hills with a waterfall stop, then settle into your resort."
+        },
+        {
+          "title": "Munnar tea country",
+          "text": "Visit a tea estate, Mattupetty Dam and a sunset viewpoint."
+        },
+        {
+          "title": "Munnar to Alleppey",
+          "text": "Scenic drive and boarding your houseboat in the afternoon."
+        },
+        {
+          "title": "Backwater day",
+          "text": "Cruise the canals, have a home-style Kerala lunch and an Ayurvedic massage."
+        },
+        {
+          "title": "Departure",
+          "text": "Breakfast and transfer to Kochi airport."
+        }
+      ],
+      "featured": true
+    },
+    {
+      "id": "ladakh-7d",
+      "name": "Leh, Nubra and Pangong",
+      "dest_id": "ladakh",
+      "days": 7,
+      "nights": 6,
+      "price": 32000,
+      "cats": [
+        "mountains"
+      ],
+      "img": "ladakh.avif",
+      "summary": "High passes, Hunder dunes and a night by Pangong lake.",
+      "highlights": [
+        "Khardung La pass",
+        "Camel ride in Hunder dunes",
+        "Night by Pangong lake"
+      ],
+      "itinerary": [
+        {
+          "title": "Arrive in Leh",
+          "text": "Rest day to adjust to the altitude. Short walk to Leh market."
+        },
+        {
+          "title": "Leh sightseeing",
+          "text": "Shey Palace, Thiksey Monastery and Hemis in the afternoon."
+        },
+        {
+          "title": "Leh to Nubra",
+          "text": "Cross Khardung La and reach Hunder by evening."
+        },
+        {
+          "title": "Nubra Valley",
+          "text": "Camel ride in the dunes and a visit to Diskit Monastery."
+        },
+        {
+          "title": "Nubra to Pangong",
+          "text": "Drive via Shyok to the lake and stay in camps."
+        },
+        {
+          "title": "Pangong to Leh",
+          "text": "Sunrise at the lake, then a long drive back to Leh."
+        },
+        {
+          "title": "Departure",
+          "text": "Transfer to Leh airport."
+        }
+      ],
+      "featured": true
+    },
+    {
+      "id": "golden-triangle-6d",
+      "name": "Golden Triangle",
+      "dest_id": "rajasthan",
+      "days": 6,
+      "nights": 5,
+      "price": 21999,
+      "cats": [
+        "heritage",
+        "family"
+      ],
+      "img": "agra.jpg",
+      "summary": "Delhi, Agra and Jaipur with private guides.",
+      "highlights": [
+        "Taj Mahal at sunrise",
+        "Amber Fort with a local guide",
+        "Old Delhi food walk"
+      ],
+      "itinerary": [
+        {
+          "title": "Arrive in Delhi",
+          "text": "Pickup, hotel check-in and an evening at India Gate."
+        },
+        {
+          "title": "Delhi sightseeing",
+          "text": "Red Fort, Jama Masjid and a food walk in Old Delhi."
+        },
+        {
+          "title": "Delhi to Agra",
+          "text": "Drive to Agra, visit Agra Fort and see the sunset at Mehtab Bagh."
+        },
+        {
+          "title": "Agra to Jaipur",
+          "text": "Taj Mahal at sunrise, then drive to Jaipur via Fatehpur Sikri."
+        },
+        {
+          "title": "Jaipur",
+          "text": "Amber Fort, City Palace, Hawa Mahal and the bazaars."
+        },
+        {
+          "title": "Departure",
+          "text": "Transfer to Jaipur airport or station."
+        }
+      ],
+      "featured": true
+    },
+    {
+      "id": "goa-4d",
+      "name": "Goa Beach Break",
+      "dest_id": "goa",
+      "days": 4,
+      "nights": 3,
+      "price": 14999,
+      "cats": [
+        "beaches",
+        "honeymoon"
+      ],
+      "img": "goa.avif",
+      "summary": "Beaches, old Goa churches and sunset cafes.",
+      "highlights": [
+        "North Goa beach hopping",
+        "Old Goa churches",
+        "Sunset at Chapora Fort"
+      ],
+      "itinerary": [
+        {
+          "title": "Arrive in Goa",
+          "text": "Pickup and hotel check-in. Evening at Calangute beach."
+        },
+        {
+          "title": "North Goa",
+          "text": "Baga, Anjuna and Vagator beaches, Chapora Fort at sunset."
+        },
+        {
+          "title": "Old Goa and Panjim",
+          "text": "Basilica of Bom Jesus, Fontainhas walk and a river dinner."
+        },
+        {
+          "title": "Departure",
+          "text": "Breakfast and airport drop."
+        }
+      ],
+      "featured": false
+    },
+    {
+      "id": "kashmir-5d",
+      "name": "Kashmir Valley",
+      "dest_id": "kashmir",
+      "days": 5,
+      "nights": 4,
+      "price": 28000,
+      "cats": [
+        "mountains",
+        "honeymoon"
+      ],
+      "img": "kashmir.jpg",
+      "summary": "Shikara ride on Dal Lake and the meadows of Gulmarg.",
+      "highlights": [
+        "Shikara ride on Dal Lake",
+        "Gondola ride in Gulmarg",
+        "Mughal gardens in Srinagar"
+      ],
+      "itinerary": [
+        {
+          "title": "Arrive in Srinagar",
+          "text": "Pickup, houseboat check-in and an evening Shikara ride."
+        },
+        {
+          "title": "Srinagar",
+          "text": "Mughal gardens, Shankaracharya Temple and old city market."
+        },
+        {
+          "title": "Gulmarg",
+          "text": "Day trip with the gondola ride and snow or meadow walks."
+        },
+        {
+          "title": "Pahalgam",
+          "text": "Betaab Valley and Aru Valley with a riverside lunch."
+        },
+        {
+          "title": "Departure",
+          "text": "Transfer to Srinagar airport."
+        }
+      ],
+      "featured": false
+    },
+    {
+      "id": "rishikesh-4d",
+      "name": "Rishikesh and Haridwar",
+      "dest_id": "rishikesh",
+      "days": 4,
+      "nights": 3,
+      "price": 12999,
+      "cats": [
+        "spiritual",
+        "mountains"
+      ],
+      "img": "rishikesh.jpg",
+      "summary": "Ganga aarti, a yoga session and optional river rafting.",
+      "highlights": [
+        "Ganga aarti at Har Ki Pauri",
+        "Morning yoga session",
+        "Optional river rafting"
+      ],
+      "itinerary": [
+        {
+          "title": "Arrive in Haridwar",
+          "text": "Check-in and Ganga aarti at Har Ki Pauri."
+        },
+        {
+          "title": "Haridwar to Rishikesh",
+          "text": "Mansa Devi temple, then Laxman Jhula and Ram Jhula."
+        },
+        {
+          "title": "Rishikesh",
+          "text": "Morning yoga, optional rafting and the evening aarti at Triveni Ghat."
+        },
+        {
+          "title": "Departure",
+          "text": "Breakfast and drop to Haridwar station or Dehradun airport."
+        }
+      ],
+      "featured": false
+    },
+    {
+      "id": "ayodhya-2d",
+      "name": "Ayodhya Darshan",
+      "dest_id": "ayodhya",
+      "days": 2,
+      "nights": 1,
+      "price": 7499,
+      "cats": [
+        "spiritual",
+        "family"
+      ],
+      "img": "ayodhya.jpg",
+      "summary": "Temple darshan and the evening aarti on the Sarayu.",
+      "highlights": [
+        "Ram Janmabhoomi darshan",
+        "Hanuman Garhi",
+        "Sarayu aarti"
+      ],
+      "itinerary": [
+        {
+          "title": "Arrive in Ayodhya",
+          "text": "Check-in, Hanuman Garhi and Kanak Bhawan. Evening Sarayu aarti."
+        },
+        {
+          "title": "Ayodhya darshan",
+          "text": "Ram temple darshan in the morning, then drop to the station."
+        }
+      ],
+      "featured": false
+    },
+    {
+      "id": "darjeeling-5d",
+      "name": "Darjeeling and Gangtok",
+      "dest_id": "darjeeling",
+      "days": 5,
+      "nights": 4,
+      "price": 19500,
+      "cats": [
+        "mountains",
+        "family"
+      ],
+      "img": "darjeeling.avif",
+      "summary": "Toy train, tea gardens and Kanchenjunga views.",
+      "highlights": [
+        "Toy train ride",
+        "Tiger Hill sunrise",
+        "Tsomgo Lake near Gangtok"
+      ],
+      "itinerary": [
+        {
+          "title": "Arrive in Bagdogra",
+          "text": "Drive to Darjeeling and check in."
+        },
+        {
+          "title": "Darjeeling",
+          "text": "Tiger Hill sunrise, tea garden visit and a toy train ride."
+        },
+        {
+          "title": "Darjeeling to Gangtok",
+          "text": "Scenic drive and an evening at MG Marg."
+        },
+        {
+          "title": "Gangtok",
+          "text": "Tsomgo Lake and Baba Mandir day trip."
+        },
+        {
+          "title": "Departure",
+          "text": "Drive to Bagdogra airport or NJP station."
+        }
+      ],
+      "featured": false
+    }
+  ]
+}

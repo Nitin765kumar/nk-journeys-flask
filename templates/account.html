@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}My bookings | NK Journeys{% endblock %}
+{% block seo %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+{% block content %}
+<div class="wrap">
+  <div class="page-h">
+    <h1 style="font-size: clamp(30px, 4vw, 44px)">Hello, {{ user.name }}</h1>
+    <p>{{ user.email }} | {{ user.phone }}</p>
+  </div>
+  <section class="panel">
+    <h2>My bookings</h2>
+    {% if bookings %}
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th>Booking</th><th>Trip</th><th>Travel date</th><th>Total</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        {% for b in bookings %}
+        <tr>
+          <td>{{ b.ref }}</td><td>{{ b.package_name }}</td><td>{{ b.travel_date|fmt_date }}</td><td>{{ b.total|inr }}</td>
+          <td><span class="badge">{{ b.status }}</span></td>
+          <td>{% if b.status == 'Pending payment' %}<a href="{{ url_for('pay', token=b.token) }}"><u>Complete payment</u></a>{% elif b.status != 'Cancelled' %}<a href="{{ url_for('voucher', token=b.token) }}"><u>Open voucher</u></a>{% endif %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table></div>
+    {% else %}
+    <p class="mut">You have no bookings yet. Bookings you make while logged in will appear here.</p>
+    <a class="btn btn-gold" href="{{ url_for('packages') }}">Browse packages</a>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

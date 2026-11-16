@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% from "_macros.html" import package_card %}
+{% block title %}{% if dest %}Trips in {{ dest.name }}{% else %}Packages{% endif %} | NK Journeys{% endblock %}
+{% block description %}All NK Journeys trip packages with prices.{% endblock %}
+{% block content %}
+<div class="wrap">
+  <div class="page-h">
+    <h1 style="font-size: clamp(32px, 4vw, 48px)">{% if dest %}Trips in {{ dest.name }}{% else %}All packages{% endif %}</h1>
+    <p>{% if dest %}{{ dest.blurb }}{% else %}Every price is per adult. GST is added at checkout.{% endif %}</p>
+  </div>
+  <form class="bar bar-3" method="get">
+    {% if dest %}<input type="hidden" name="dest" value="{{ dest.id }}">{% endif %}
+    {% if cat %}<input type="hidden" name="cat" value="{{ cat }}">{% endif %}
+    <div><label for="pq">Search trips</label><input id="pq" name="q" value="{{ q }}" placeholder="Search by place or name"></div>
+    <div>
+      <label for="ps">Sort by</label>
+      <select id="ps" name="sort" data-autosubmit>
+        {% for value, label in [('pop', 'Popular'), ('lo', 'Price: low to high'), ('hi', 'Price: high to low'), ('dur', 'Shortest first')] %}
+        <option value="{{ value }}"{% if sort == value %} selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button class="btn btn-ink" style="height: 48px; align-self: end">Search</button>
+  </form>
+  <div class="chips" role="group" aria-label="Trip style">
+    <a class="chip" href="{{ url_with(cat='all') }}"{% if not cat %} aria-current="true"{% endif %}>All trips</a>
+    {% for key, label in categories %}
+    <a class="chip" href="{{ url_with(cat=key) }}"{% if cat == key %} aria-current="true"{% endif %}>{{ label }}</a>
+    {% endfor %}
+  </div>
+  <p class="mut" aria-live="polite">{{ items|length }} trip{{ '' if items|length == 1 else 's' }}</p>
+  <div class="grid">
+    {% for p in items %}{{ package_card(p) }}
+    {% else %}
+    <div class="empty" style="grid-column: 1 / -1"><h3>No trips match these filters</h3><p>Clear a filter or <a href="{{ url_for('contact') }}"><u>ask us for a custom plan</u></a>.</p></div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "admin/base.html" %}
+{% block title %}Enquiries{% endblock %}
+{% block content %}
+<h1>Enquiries</h1>
+{% for e in rows %}
+<section class="panel">
+  <div class="head" style="margin-bottom: 8px">
+    <h3 style="margin: 0">{{ e.name }} <small class="mut">{{ e.ref }}, {{ e.created_at|fmt_datetime }}</small></h3>
+    <form method="post" action="{{ url_for('admin.enquiry_status', enquiry_id=e.id) }}" class="inline-form">
+      {{ csrf_field() }}
+      <label class="sr" for="s{{ e.id }}">Status</label>
+      <select id="s{{ e.id }}" name="status" data-autosubmit>{% for s in statuses %}<option{% if s == e.status %} selected{% endif %}>{{ s }}</option>{% endfor %}</select>
+      <button class="btn btn-line">Save</button>
+    </form>
+  </div>
+  <p class="mut" style="margin: 0 0 8px">{{ e.email }}{% if e.phone %}, {{ e.phone }}{% endif %} | Trip: {{ e.trip }}{% if e.travel_when %} | When: {{ e.travel_when }}{% endif %}</p>
+  <p style="margin: 0; white-space: pre-wrap">{{ e.message }}</p>
+</section>
+{% else %}
+<section class="panel"><p class="mut">No enquiries yet.</p></section>
+{% endfor %}
+{% endblock %}

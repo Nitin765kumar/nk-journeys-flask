@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}Privacy policy | NK Journeys{% endblock %}
+{% block description %}How NK Journeys collects, uses and protects personal information.{% endblock %}
+{% block content %}
+    <div class="wrap">
+      <div class="page-h">
+        <h1 style="font-size: clamp(32px, 4vw, 48px)">Privacy policy</h1>
+        <p class="upd">Last updated: 13 November 2026. This is sample text written for a demo project. It is not legal advice, and a real business should have its policies reviewed by a lawyer.</p>
+      </div>
+      <div class="legal-g">
+        <nav class="toc" aria-label="On this page">
+          <b>On this page</b>
+          <ol>
+            <li><a href="#s1">Who we are</a></li>
+            <li><a href="#s2">What we collect</a></li>
+            <li><a href="#s3">How we use it</a></li>
+            <li><a href="#s4">Where your data is stored in this demo</a></li>
+            <li><a href="#s5">Who we share it with</a></li>
+            <li><a href="#s6">Cookies and local storage</a></li>
+            <li><a href="#s7">How long we keep data</a></li>
+            <li><a href="#s8">Your choices and rights</a></li>
+            <li><a href="#s9">Security</a></li>
+            <li><a href="#s10">Children's data</a></li>
+            <li><a href="#s11">Changes to this policy</a></li>
+            <li><a href="#s12">Contact us</a></li>
+          </ol>
+        </nav>
+        <article class="legal">
+        <section>
+          <h2 id="s1">1. Who we are</h2>
+      <p>NK Journeys is a travel planning service that lets you browse trips across India, make bookings and contact our team. In this policy, "we" and "us" mean NK Journeys, and "you" means anyone who uses our website.</p>
+        </section>
+        <section>
+          <h2 id="s2">2. What we collect</h2>
+      <p>We collect only what we need to plan and confirm a trip:</p>
+      <ul class="lst">
+        <li>Contact details: name, mobile number, email address and city.</li>
+        <li>Traveller details: names of everyone travelling, travel dates and the number of adults and children.</li>
+        <li>Booking and payment records: booking ID, payment ID, amount, payment method and the last four digits of a card. We never store a full card number, CVV or UPI PIN.</li>
+        <li>Messages you send us through the contact form.</li>
+        <li>Basic technical data such as browser type and pages visited, to keep the site working.</li>
+      </ul>
+        </section>
+        <section>
+          <h2 id="s3">3. How we use it</h2>
+      <ul class="lst">
+        <li>To confirm bookings, issue vouchers and share pickup and hotel details.</li>
+        <li>To arrange services with hotels, drivers and guides for your trip.</li>
+        <li>To answer your questions and handle changes, cancellations and refunds.</li>
+        <li>To meet tax and accounting rules.</li>
+        <li>To improve the website. We do not sell your personal information.</li>
+      </ul>
+        </section>
+        <section>
+          <h2 id="s4">4. Where your data is stored in this demo</h2>
+      <p>This site is a demo project with no server. Bookings and enquiries are saved only in your own browser using local storage, and are not sent to us or anyone else. You can remove them at any time by clearing the site data in your browser settings. A live service would store this data on a secured server and describe it here.</p>
+        </section>
+        <section>
+          <h2 id="s5">5. Who we share it with</h2>
+      <p>We share only what is needed to deliver your trip:</p>
+      <ul class="lst">
+        <li>Hotels and transport partners, for check-in and pickups.</li>
+        <li>Our payment gateway, which processes your payment and holds card details so we do not have to.</li>
+        <li>Authorities, when the law requires it.</li>
+      </ul>
+        </section>
+        <section>
+          <h2 id="s6">6. Cookies and local storage</h2>
+      <p>We use local storage to remember your booking while you move through the checkout and to keep your voucher. We do not use advertising cookies. If we add analytics later, we will list them here.</p>
+        </section>
+        <section>
+          <h2 id="s7">7. How long we keep data</h2>
+      <p>Booking and payment records are kept for as long as tax and accounting rules require. Enquiries that do not lead to a booking are deleted after 12 months.</p>
+        </section>
+        <section>
+          <h2 id="s8">8. Your choices and rights</h2>
+      <p>You can ask us to show you the data we hold about you, correct it, or delete it, subject to legal record-keeping duties. Under applicable Indian law, including the Digital Personal Data Protection Act, 2023, you may also withdraw consent and raise a complaint. Contact us using the details below.</p>
+        </section>
+        <section>
+          <h2 id="s9">9. Security</h2>
+      <p>We use reasonable safeguards: encrypted connections, payments handled by a certified gateway, and limited access to booking data. No system is perfectly secure, so please also protect your own devices and never share your booking ID publicly.</p>
+        </section>
+        <section>
+          <h2 id="s10">10. Children's data</h2>
+      <p>We collect children's names and ages only to arrange their travel, and only from a parent or guardian making the booking.</p>
+        </section>
+        <section>
+          <h2 id="s11">11. Changes to this policy</h2>
+      <p>We will update the date at the top of this page when the policy changes. Significant changes will be announced on the booking page.</p>
+        </section>
+        <section>
+          <h2 id="s12">12. Contact us</h2>
+      <p>Questions about privacy? Write to hello@nkjourneys.example or use our <a href="{{ url_for('contact') }}"><u>contact form</u></a>.</p>
+        </section>
+        </article>
+      </div>
+    </div>
+{% endblock %}

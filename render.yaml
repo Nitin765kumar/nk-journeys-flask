@@ -1,0 +1,21 @@
+# Render blueprint. Check Render's current docs for plan names and Python versions before deploying.
+services:
+  - type: web
+    name: nk-journeys
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn "app:create_app()" --workers 1 --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.3
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ADMIN_USERNAME
+        value: admin
+      - key: ADMIN_PASSWORD
+        sync: false          # you type this in the Render dashboard
+      - key: SITE_URL
+        sync: false          # for example https://nk-journeys.onrender.com
+      - key: SESSION_COOKIE_SECURE
+        value: "1"

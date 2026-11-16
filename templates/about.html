@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% from "_macros.html" import responsive %}
+{% block title %}About us | NK Journeys{% endblock %}
+{% block description %}Who we are, how we plan trips across India, and the people behind NK Journeys.{% endblock %}
+{% block content %}
+    <div class="wrap">
+      <div class="page-h">
+        <h1 style="font-size: clamp(32px, 4vw, 48px)">We plan trips the way we would want ours planned</h1>
+        <p>NK Journeys is a small travel team that builds clear, unhurried trips across India.</p>
+      </div>
+    </div>
+
+    <section class="wrap">
+      <div class="split">
+        <div>
+          <h2>Our story</h2>
+          <p>NK Journeys began with a simple frustration. Planning a trip in India usually means comparing a dozen tabs, decoding package lists that never say what is actually included, and hoping the hotel matches the photos.</p>
+          <p>We wanted one place where the plan, the price and the people behind the trip are all clear before you pay. So every package we list follows the same pattern: a day-by-day plan you can read in two minutes, a plain list of what is and is not included, and a price with GST shown upfront.</p>
+          <p>We are a small team, and we like it that way. The people who plan your trip are the people you can call when something changes.</p>
+        </div>
+        <div class="cover">{{ responsive('team3.jpg', "(max-width: 900px) 100vw, 50vw", 'The NK Journeys team together', (800, 1200)) }}</div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="wrap">
+        <h2 style="margin-bottom: 22px">What we offer today</h2>
+        <div class="facts">
+          <div class="fact"><b>8</b>destinations across the north, south, east and west</div>
+          <div class="fact"><b>8</b>ready-to-book packages with full itineraries</div>
+          <div class="fact"><b>2 to 7</b>days per trip, so there is a fit for a long weekend or a full week</div>
+          <div class="fact"><b>30%</b>advance option, with the balance due a week before travel</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="wrap">
+        <h2 style="margin-bottom: 8px">How we plan a trip</h2>
+        <p class="mut" style="margin: 0 0 22px">The same six steps for a two-day pilgrimage or a week in the Himalaya.</p>
+        <div class="steps">
+          <div class="step"><b>1</b><h3>We listen</h3><p>You tell us who is travelling, when, and what a good trip means to you: slow mornings, long drives, food, temples or snow.</p></div>
+          <div class="step"><b>2</b><h3>We shortlist</h3><p>We suggest one or two routes from our packages, or adjust a package to fit your dates and pace.</p></div>
+          <div class="step"><b>3</b><h3>We check</h3><p>Hotels, drivers and timings are confirmed before we quote. If a leg is too rushed, we say so and change it.</p></div>
+          <div class="step"><b>4</b><h3>We price it plainly</h3><p>You see the trip fare, GST and what is included or not, in one summary. No surprises at checkout.</p></div>
+          <div class="step"><b>5</b><h3>We brief you</h3><p>Before you leave you get pickup details, a document checklist and local tips for the season.</p></div>
+          <div class="step"><b>6</b><h3>We stay reachable</h3><p>Someone on our team is a call or message away for the whole trip, not only office hours on day one.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="wrap">
+        <h2 style="margin-bottom: 22px">What we stand for</h2>
+        <div class="vals">
+          <div class="panel"><h3>Clear prices</h3><p>You see the fare, the GST and the total before you pay. Cancellation terms are written in plain language and linked from every package.</p></div>
+          <div class="panel"><h3>Safety first</h3><p>We avoid rushed mountain drives, brief you on altitude and weather, and keep a contact on call during every trip.</p></div>
+          <div class="panel"><h3>Local first</h3><p>We prefer family-run stays, local guides and neighbourhood food, so the places you visit benefit from your visit.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="wrap">
+        <h2 style="margin-bottom: 22px">The people behind your trip</h2>
+        <div class="team">
+          <article class="person">
+            <img src="{{ url_for('static', filename='img/founder-264.webp') }}" alt="Nitin Kumar" width="132" height="132" loading="lazy" decoding="async">
+            <h3>Nitin Kumar</h3>
+            <p><b>Founder and lead developer</b></p>
+            <p>Designs the planning flow and the website, and answers the questions nobody else has time for.</p>
+          </article>
+          <article class="person">
+            <img src="{{ url_for('static', filename='img/rishikant-264.webp') }}" alt="Rishikant" width="132" height="132" loading="lazy" decoding="async">
+            <h3>Rishikant</h3>
+            <p><b>Operations lead</b></p>
+            <p>Runs ground logistics: drivers, transfers, hotel check-ins and traveller safety on every circuit.</p>
+          </article>
+          <article class="person">
+            <img src="{{ url_for('static', filename='img/anish-264.webp') }}" alt="Anish Bhashkar" width="132" height="132" loading="lazy" decoding="async">
+            <h3>Anish Bhashkar</h3>
+            <p><b>Head of research</b></p>
+            <p>Verifies history and timings, and finds quieter heritage sites that make an itinerary feel unrushed.</p>
+          </article>
+          <article class="person">
+            <img src="{{ url_for('static', filename='img/shailendra-264.webp') }}" alt="Shailendra" width="132" height="132" loading="lazy" decoding="async">
+            <h3>Shailendra</h3>
+            <p><b>Strategy director</b></p>
+            <p>Builds partnerships with hotels, guides and local communities so more of your spend stays at the destination.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="wrap">
+        <h2 style="margin-bottom: 8px">Places on our wish list</h2>
+        <p class="mut" style="margin: 0 0 22px">Not bookable yet, but where we would like to take you next.</p>
+        <div class="gal">
+          <figure>
+            {{ responsive('redfort.jpg', "(max-width: 900px) 50vw, 25vw", 'Red Fort, Delhi', (480, 800)) }}
+            <figcaption>Red Fort, Delhi</figcaption>
+          </figure>
+          <figure>
+            {{ responsive('goldentemple.jpg', "(max-width: 900px) 50vw, 25vw", 'Golden Temple, Amritsar', (480, 800)) }}
+            <figcaption>Golden Temple, Amritsar</figcaption>
+          </figure>
+          <figure>
+            {{ responsive('Meenakshi.jpg', "(max-width: 900px) 50vw, 25vw", 'Meenakshi Temple, Madurai', (480, 800)) }}
+            <figcaption>Meenakshi Temple, Madurai</figcaption>
+          </figure>
+          <figure>
+            {{ responsive('hampi.avif', "(max-width: 900px) 50vw, 25vw", 'Hampi, Karnataka', (480, 800)) }}
+            <figcaption>Hampi, Karnataka</figcaption>
+          </figure>
+          <figure>
+            {{ responsive('kedarnath.jpg', "(max-width: 900px) 50vw, 25vw", 'Kedarnath, Uttarakhand', (480, 800)) }}
+            <figcaption>Kedarnath, Uttarakhand</figcaption>
+          </figure>
+          <figure>
+            {{ responsive('tawang.jpg', "(max-width: 900px) 50vw, 25vw", 'Tawang, Arunachal Pradesh', (480, 800)) }}
+            <figcaption>Tawang, Arunachal Pradesh</figcaption>
+          </figure>
+          <figure>
+            {{ responsive('puri.jpg', "(max-width: 900px) 50vw, 25vw", 'Puri, Odisha', (480, 800)) }}
+            <figcaption>Puri, Odisha</figcaption>
+          </figure>
+          <figure>
+            {{ responsive('kaziranga.avif', "(max-width: 900px) 50vw, 25vw", 'Kaziranga, Assam', (480, 800)) }}
+            <figcaption>Kaziranga, Assam</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="wrap">
+        <div class="panel">
+          <h2>Travelling responsibly</h2>
+          <p>India's most loved places are also its most fragile. We ask every traveller to carry a refillable bottle, avoid single-use plastic, dress modestly at temples, ask before photographing people, and keep to marked trails in the mountains. Where we can, we book hotels that manage waste and water carefully.</p>
+          <p>If a place is overcrowded in a given season, we will tell you and suggest a quieter week or a nearby alternative.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="wrap">
+        <div class="cta">
+          <h2>Ready to plan something?</h2>
+          <p>Browse the packages, or tell us what you have in mind.</p>
+          <a class="btn btn-ink" href="{{ url_for('packages') }}">Browse packages</a>
+          <a class="btn btn-line" href="{{ url_for('contact') }}" style="margin-left: 10px">Contact us</a>
+        </div>
+      </div>
+    </section>
+{% endblock %}

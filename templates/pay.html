@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf_field %}
+{% block title %}Payment | NK Journeys{% endblock %}
+{% block seo %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+{% block content %}
+<div class="wrap">
+  <div class="page-h">
+    <h1 style="font-size: clamp(30px, 4vw, 44px)">Payment</h1>
+    <p>Step 2 of 3. Choose how to pay {{ b.pay_now|inr }} for booking {{ b.ref }}.</p>
+  </div>
+  <div class="two">
+    <div class="panel">
+      <div class="hint"><b>Demo payment, nothing is charged.</b> Test card 4111 1111 1111 1111 succeeds and 4000 0000 0000 0002 fails. For UPI, any name@bank succeeds and fail@upi fails. Do not enter real card details.</div>
+      <div class="tabs" role="tablist" aria-label="Payment method">
+        {% for key, label in [('upi', 'UPI'), ('card', 'Card'), ('nb', 'Net banking'), ('wl', 'Wallet')] %}
+        <button type="button" class="tab" role="tab" data-tab="{{ key }}" aria-selected="{{ 'true' if active == key else 'false' }}">{{ label }}</button>
+        {% endfor %}
+      </div>
+      {% if error %}<div class="err" role="alert">{{ error }}</div>{% endif %}
+
+      <form method="post" class="pane" data-pane="upi"{% if active != 'upi' %} hidden{% endif %}>
+        {{ csrf_field() }}<input type="hidden" name="method" value="upi">
+        <div class="f"><label for="upi">UPI ID</label><input id="upi" name="upi" placeholder="name@bank" autocomplete="off"></div>
+        <button class="btn btn-gold btn-block">Pay {{ b.pay_now|inr }}</button>
+      </form>
+      <form method="post" class="pane" data-pane="card"{% if active != 'card' %} hidden{% endif %}>
+        {{ csrf_field() }}<input type="hidden" name="method" value="card">
+        <div class="f"><label for="card_number">Card number</label><input id="card_number" name="card_number" inputmode="numeric" maxlength="19" placeholder="0000 0000 0000 0000" autocomplete="off"></div>
+        <div class="f"><label for="card_name">Name on card</label><input id="card_name" name="card_name" autocomplete="off"></div>
+        <div class="row">
+          <div class="f"><label for="card_expiry">Expiry (MM/YY)</label><input id="card_expiry" name="card_expiry" maxlength="5" placeholder="MM/YY" autocomplete="off"></div>
+          <div class="f"><label for="card_cvv">CVV</label><input id="card_cvv" name="card_cvv" type="password" inputmode="numeric" maxlength="3" autocomplete="off"></div>
+        </div>
+        <button class="btn btn-gold btn-block">Pay {{ b.pay_now|inr }}</button>
+      </form>
+      <form method="post" class="pane" data-pane="nb"{% if active != 'nb' %} hidden{% endif %}>
+        {{ csrf_field() }}<input type="hidden" name="method" value="nb">
+        <div class="f"><label for="bank">Choose your bank</label>
+          <select id="bank" name="bank"><option value="">Select a bank</option>{% for x in banks %}<option>{{ x }}</option>{% endfor %}</select>
+        </div>
+        <button class="btn btn-gold btn-block">Continue to bank</button>
+      </form>
+      <form method="post" class="pane" data-pane="wl"{% if active != 'wl' %} hidden{% endif %}>
+        {{ csrf_field() }}<input type="hidden" name="method" value="wl">
+        <div class="f"><label for="wallet">Choose a wallet</label>
+          <select id="wallet" name="wallet"><option value="">Select a wallet</option>{% for x in wallets %}<option>{{ x }}</option>{% endfor %}</select>
+        </div>
+        <button class="btn btn-gold btn-block">Pay {{ b.pay_now|inr }}</button>
+      </form>
+      <noscript><style>.pane[hidden] { display: block !important; }</style></noscript>
+    </div>
+    <aside class="sticky">
+      <section class="panel">
+        <h3>{{ b.package_name }}</h3>
+        <p class="mut" style="margin: 0 0 12px">{{ b.travel_date|fmt_date }}, {{ b.adults }} adult{{ '' if b.adults == 1 else 's' }}{% if b.children %}, {{ b.children }} child{{ 'ren' if b.children > 1 else '' }}{% endif %}</p>
+        <div class="sum">
+          <div><span>Trip fare</span><span>{{ b.base|inr }}</span></div>
+          {% if b.discount %}<div><span>Coupon discount</span><span>− {{ b.discount|inr }}</span></div>{% endif %}
+          <div><span>GST (5%)</span><span>{{ b.gst|inr }}</span></div>
+          <div class="tot"><span>Total</span><span>{{ b.total|inr }}</span></div>
+          <div class="tot"><span>Pay now</span><span>{{ b.pay_now|inr }}</span></div>
+        </div>
+        {% if b.pay_mode == 'advance' %}<p class="mut" style="font-size: 14px">Balance {{ (b.total - b.pay_now)|inr }} is due 7 days before departure.</p>{% endif %}
+        <p style="margin: 8px 0 0"><a href="{{ url_for('book', package_id=b.package_id) }}"><u>Start a new booking</u></a></p>
+      </section>
+    </aside>
+  </div>
+</div>
+<div class="ov" id="processing" role="status" aria-live="polite">
+  <div><div class="spin"></div><h2>Processing your payment</h2><p>Please do not refresh or close this page.</p></div>
+</div>
+{% endblock %}

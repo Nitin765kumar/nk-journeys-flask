@@ -1,0 +1,24 @@
+{% extends "admin/base.html" %}
+{% block title %}Bookings{% endblock %}
+{% block content %}
+<h1>Bookings</h1>
+<form class="bar bar-3" method="get">
+  <div><label for="q">Search (ref, name, phone, email)</label><input id="q" name="q" value="{{ q }}"></div>
+  <div><label for="status">Status</label>
+    <select id="status" name="status"><option value="">All</option>{% for s in statuses %}<option{% if s == status %} selected{% endif %}>{{ s }}</option>{% endfor %}</select>
+  </div>
+  <button class="btn btn-ink" style="height: 48px; align-self: end">Filter</button>
+</form>
+<section class="panel">
+  {% if rows %}
+  <div class="table-wrap"><table class="tbl">
+    <thead><tr><th>Ref</th><th>Trip</th><th>Customer</th><th>Phone</th><th>Travel date</th><th>Total</th><th>Status</th></tr></thead>
+    <tbody>
+      {% for b in rows %}
+      <tr><td><a href="{{ url_for('admin.booking', booking_id=b.id) }}"><u>{{ b.ref }}</u></a></td><td>{{ b.package_name }}</td><td>{{ b.name }}</td><td>{{ b.phone }}</td><td>{{ b.travel_date|fmt_date }}</td><td>{{ b.total|inr }}</td><td><span class="badge">{{ b.status }}</span></td></tr>
+      {% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}<p class="mut">No bookings match.</p>{% endif %}
+</section>
+{% endblock %}

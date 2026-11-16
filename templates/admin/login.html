@@ -1,0 +1,11 @@
+{% extends "admin/base.html" %}
+{% block title %}Log in{% endblock %}
+{% block content %}
+<form class="panel adm-login" method="post">
+  {{ csrf_field() }}
+  <h1 style="font-size: 30px; margin-bottom: 16px">Admin log in</h1>
+  <div class="f"><label for="username">Username</label><input id="username" name="username" autocomplete="username" required></div>
+  <div class="f"><label for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" required></div>
+  <button class="btn btn-ink btn-block">Log in</button>
+</form>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf_field %}
+{% block title %}Log in | NK Journeys{% endblock %}
+{% block description %}Log in to see and manage your NK Journeys bookings.{% endblock %}
+{% block seo %}<meta name="robots" content="noindex, follow">{% endblock %}
+{% block content %}
+<div class="wrap">
+  <form class="panel auth" method="post" novalidate>
+    {{ csrf_field() }}
+    <h1>Log in</h1>
+    <p class="mut">See your bookings and book faster with your details filled in.</p>
+    <div class="f"><label for="email">Email</label><input id="email" name="email" type="email" value="{{ email }}" autocomplete="email" required></div>
+    <div class="f"><label for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" required></div>
+    <button class="btn btn-gold btn-block">Log in</button>
+    <p class="auth-alt">New here? <a href="{{ url_for('accounts.register', next=next) }}"><u>Create an account</u></a></p>
+    <p class="auth-alt"><a href="{{ url_for('admin.login') }}"><u>Admin login</u></a></p>
+  </form>
+</div>
+{% endblock %}

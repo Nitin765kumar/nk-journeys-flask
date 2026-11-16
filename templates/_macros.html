@@ -1,0 +1,76 @@
+{# Reusable pieces: logo, cards, tiles and the CSRF field. #}
+
+{% macro logo_mark() %}
+<svg width="36" height="36" viewBox="0 0 80 80" aria-hidden="true" focusable="false">
+  <circle cx="40" cy="40" r="38" fill="#FBF5EA"/>
+  <path d="M26 66 C26 50 54 54 52 38 S62 22 56 14" fill="none" stroke="#14213D" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="56" cy="14" r="5" fill="#F2A33A"/>
+</svg>
+{% endmacro %}
+
+{% macro csrf_field() %}
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+{% endmacro %}
+
+{# Every photo has resized copies: kerala.jpg -> kerala-480.webp, kerala-800.webp, kerala-1200.webp #}
+{% macro responsive(name, sizes, alt="", widths=(480, 800, 1200), eager=false) %}
+{%- set stem = name.rsplit('.', 1)[0] -%}
+<img src="{{ url_for('static', filename='img/' ~ stem ~ '-800.webp') }}"
+     srcset="{% for w in widths %}{{ url_for('static', filename='img/' ~ stem ~ '-' ~ w ~ '.webp') }} {{ w }}w{{ ', ' if not loop.last }}{% endfor %}"
+     sizes="{{ sizes }}" alt="{{ alt }}"{% if eager %} fetchpriority="high"{% else %} loading="lazy"{% endif %} decoding="async">
+{%- endmacro %}
+
+{% macro photo(name, cls="ph") %}
+<div class="{{ cls }}">{{ responsive(name, "(max-width: 900px) 100vw, 60vw" if cls == "cover" else "(max-width: 760px) 92vw, (max-width: 1200px) 45vw, 25vw") }}</div>
+{% endmacro %}
+
+{% macro package_card(p) %}
+<article class="card">
+  {{ photo(p.img) }}
+  <div class="card-b">
+    <p class="meta">{{ p.dest_name }}, {{ p.days }} days and {{ p.nights }} nights</p>
+    <h3><a href="{{ url_for('package', package_id=p.id) }}">{{ p.name }}</a></h3>
+    <p class="mut">{{ p.summary }}</p>
+    <div class="card-f">
+      <span><small>From</small> <b>{{ p.price|inr_rupees }}</b><small> per adult</small></span>
+      <a class="btn btn-ink" href="{{ url_for('package', package_id=p.id) }}">View trip</a>
+    </div>
+  </div>
+</article>
+{% endmacro %}
+
+{% macro dest_card(d) %}
+<article class="card">
+  {{ photo(d.img) }}
+  <div class="card-b">
+    <p class="meta">{{ d.state }}</p>
+    <h3>{{ d.name }}</h3>
+    <p class="mut">{{ d.blurb }}</p>
+    <div class="card-f">
+      <small>Best time: {{ d.best }}</small>
+      <a class="btn btn-ink" href="{{ url_for('packages', dest=d.id) }}">See trips</a>
+    </div>
+  </div>
+</article>
+{% endmacro %}
+
+{% macro dest_tile(d) %}
+<a class="tile" href="{{ url_for('packages', dest=d.id) }}">
+  {{ responsive(d.img, "(max-width: 900px) 100vw, 50vw") }}
+  <div class="tile-t">
+    <small>{{ d.state }}</small>
+    <h3>{{ d.name }}</h3>
+    <span class="more">See trips <span aria-hidden="true">→</span></span>
+  </div>
+</a>
+{% endmacro %}
+
+{# Fare breakup. The data-q attributes let main.js update the numbers live. #}
+{% macro fare(q) %}
+<div class="sum" id="fare">
+  <div><span>Trip fare</span><span data-q="base">{{ q.base|inr }}</span></div>
+  <div data-row="discount"{% if not q.discount %} hidden{% endif %}><span>Coupon discount</span><span>− <span data-q="discount">{{ q.discount|inr }}</span></span></div>
+  <div><span>GST (5%)</span><span data-q="gst">{{ q.gst|inr }}</span></div>
+  <div class="tot"><span>Total</span><span data-q="total">{{ q.total|inr }}</span></div>
+</div>
+{% endmacro %}

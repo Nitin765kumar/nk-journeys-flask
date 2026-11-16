@@ -1,0 +1,102 @@
+{% from "_macros.html" import logo_mark, csrf_field %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}NK Journeys | Trips across India{% endblock %}</title>
+  <meta name="description" content="{% block description %}Hand-planned trips across India with clear prices and one trip manager.{% endblock %}">
+  {% block seo %}
+  <link rel="canonical" href="{{ canonical }}">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="NK Journeys">
+  <meta property="og:title" content="{{ self.title() }}">
+  <meta property="og:description" content="{{ self.description() }}">
+  <meta property="og:url" content="{{ canonical }}">
+  <meta property="og:image" content="{{ site_url }}{{ url_for('static', filename='img/taj.jpg') }}">
+  <meta name="twitter:card" content="summary_large_image">
+  {% endblock %}
+  <meta name="theme-color" content="#14213D">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Inter:wght@400;500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
+  <link rel="stylesheet" href="{{ static_url('css/nkj.css') }}">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="demo-bar">
+    Demo project: bookings and payments here are simulated. No real money or personal data is processed.
+  </div>
+  <header class="nav">
+    <div class="wrap nav-in">
+      <a class="logo" href="{{ url_for('home') }}">{{ logo_mark() }}<span>NK Journeys</span></a>
+      <button class="nav-btn" aria-expanded="false" aria-controls="navl">Menu</button>
+      <nav class="nav-links" id="navl" aria-label="Main">
+        {% for endpoint, label in nav_links %}
+        <a href="{{ url_for(endpoint) }}"{% if request.endpoint == endpoint %} aria-current="page"{% endif %}>{{ label }}</a>
+        {% endfor %}
+        <span class="nav-sep" aria-hidden="true"></span>
+        {% if user %}
+        <a href="{{ url_for('accounts.account') }}"{% if request.endpoint == 'accounts.account' %} aria-current="page"{% endif %}>My bookings</a>
+        <form class="nav-form" method="post" action="{{ url_for('accounts.logout') }}">{{ csrf_field() }}<button class="nav-link-btn">Log out</button></form>
+        {% else %}
+        <a href="{{ url_for('accounts.login') }}"{% if request.endpoint == 'accounts.login' %} aria-current="page"{% endif %}>Log in</a>
+        <a class="btn btn-ghost btn-sm" href="{{ url_for('accounts.register') }}">Register</a>
+        {% endif %}
+        {% if session.get('admin') %}<a href="{{ url_for('admin.dashboard') }}">Admin</a>{% endif %}
+        <a class="btn btn-gold" href="{{ url_for('packages') }}">Plan my trip</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      <div class="wrap flashes">
+        {% for category, message in messages %}
+        <div class="{{ 'ok' if category == 'ok' else 'err' }}" role="status">{{ message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="foot">
+    <div class="wrap">
+      <div class="foot-g">
+        <div>
+          <div class="logo">{{ logo_mark() }}<span>NK Journeys</span></div>
+          <p>Stories of India, trip by trip. A portfolio project by Nitin Kumar.</p>
+        </div>
+        <div>
+          <h3>Trips</h3>
+          <a href="{{ url_for('packages') }}">All packages</a>
+          <a href="{{ url_for('destinations') }}">Destinations</a>
+          <a href="{{ url_for('contact') }}">Custom trip</a>
+        </div>
+        <div>
+          <h3>Company</h3>
+          <a href="{{ url_for('about') }}">About us</a>
+          <a href="{{ url_for('support') }}">Help and support</a>
+          <a href="{{ url_for('contact') }}">Contact</a>
+        </div>
+        <div>
+          <h3>Policies</h3>
+          <a href="{{ url_for('privacy') }}">Privacy policy</a>
+          <a href="{{ url_for('terms') }}">Terms and conditions</a>
+          <a href="{{ url_for('cancellation') }}">Cancellation and refund</a>
+          <a href="{{ url_for('payment_policy') }}">Payment policy</a>
+        </div>
+      </div>
+      <small>
+        © {{ year }} NK Journeys. Demo project: no real bookings, payments or travel services are offered.
+        <a class="admin-link" href="{{ url_for('admin.dashboard') }}">{% if session.get('admin') %}Admin dashboard{% else %}Admin login{% endif %}</a>
+      </small>
+    </div>
+  </footer>
+  <script src="{{ static_url('js/main.js') }}" defer></script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf_field, fare %}
+{% block title %}Book {{ p.name }} | NK Journeys{% endblock %}
+{% block seo %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+{% block content %}
+<div class="wrap">
+  <div class="page-h">
+    <h1 style="font-size: clamp(30px, 4vw, 44px)">Book: {{ p.name }}</h1>
+    <p>Step 1 of 3. Your details, then payment, then confirmation.</p>
+  </div>
+  <div class="two">
+    <form id="booking-form" method="post" novalidate data-price="{{ p.price }}" data-coupons='{{ coupons|tojson }}'>
+      {{ csrf_field() }}
+      {% if errors %}
+      <div class="err" role="alert">{% for e in errors %}{{ e }}{% if not loop.last %}<br>{% endif %}{% endfor %}</div>
+      {% endif %}
+      <section class="panel">
+        <h2>Lead traveller</h2>
+        <div class="row">
+          <div class="f"><label for="name">Full name (as on ID)</label><input id="name" name="name" value="{{ v.name }}" autocomplete="name" required></div>
+          <div class="f"><label for="phone">Mobile number</label><input id="phone" name="phone" value="{{ v.phone }}" inputmode="numeric" maxlength="10" autocomplete="tel" placeholder="10-digit number" required></div>
+        </div>
+        <div class="row">
+          <div class="f"><label for="email">Email</label><input id="email" name="email" type="email" value="{{ v.email }}" autocomplete="email" required></div>
+          <div class="f"><label for="city">Travelling from</label><input id="city" name="city" value="{{ v.city }}" placeholder="City"></div>
+        </div>
+      </section>
+      <section class="panel">
+        <h2>Trip details</h2>
+        <div class="row">
+          <div class="f"><label for="travel_date">Travel date</label><input id="travel_date" name="travel_date" type="date" min="{{ min_date }}" value="{{ v.travel_date }}" required></div>
+          <div class="f"><label for="adults">Adults</label>
+            <select id="adults" name="adults">{% for n in range(1, max_adults + 1) %}<option{% if n == v.adults %} selected{% endif %}>{{ n }}</option>{% endfor %}</select>
+          </div>
+        </div>
+        <div class="f"><label for="children">Children (5 to 11 years, half fare)</label>
+          <select id="children" name="children">{% for n in range(0, max_children + 1) %}<option{% if n == v.children %} selected{% endif %}>{{ n }}</option>{% endfor %}</select>
+        </div>
+        <div id="others">
+          {% set needed = v.adults + v.children - 1 %}
+          {% if needed > 0 %}
+          <h3>Other travellers</h3>
+          <div class="row">
+            {% for i in range(needed) %}
+            <div class="f"><label for="t{{ i }}">Traveller {{ i + 2 }} full name</label><input id="t{{ i }}" name="traveller" value="{{ v.travellers[i] if i < v.travellers|length else '' }}"></div>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+      </section>
+      <section class="panel">
+        <h2>Coupon</h2>
+        <input id="coupon" name="coupon" value="{{ v.coupon }}" aria-label="Coupon code" placeholder="Try NKJ10">
+        <p class="mut" id="coupon-msg" aria-live="polite" style="margin: 8px 0 0; font-size: 14px"></p>
+      </section>
+      <section class="panel">
+        <h2>How would you like to pay?</h2>
+        <label class="radio"><input type="radio" name="pay_mode" value="full"{% if v.pay_mode == 'full' %} checked{% endif %}><div><b>Pay in full now</b><span>Nothing left to pay later.</span></div></label>
+        <label class="radio"><input type="radio" name="pay_mode" value="advance"{% if v.pay_mode == 'advance' %} checked{% endif %}><div><b>Pay 30% now</b><span>The balance is due 7 days before departure.</span></div></label>
+      </section>
+      <button class="btn btn-gold btn-block" style="padding: 16px">Continue to payment</button>
+    </form>
+    <aside class="sticky">
+      <section class="panel">
+        <h3>{{ p.name }}</h3>
+        <p class="mut" style="margin: 0 0 12px">{{ p.days }} days and {{ p.nights }} nights</p>
+        {{ fare(quote) }}
+        <div class="sum"><div class="tot"><span>Pay now</span><span data-q="pay_now">{{ quote.pay_now|inr }}</span></div></div>
+      </section>
+      <section class="panel">
+        <h3>Need help booking?</h3>
+        <ol class="lst">
+          <li>Check the plan and what's included.</li>
+          <li>Enter names exactly as on ID. Hotels and permits need this.</li>
+          <li>Use a mobile number and email you check, as confirmations go there.</li>
+          <li>Review the total, then pay in full or 30%.</li>
+          <li>Save your voucher after payment.</li>
+        </ol>
+        <p style="margin: 12px 0 0"><a href="{{ url_for('support') }}#booking-guide"><u>Read the full booking guide</u></a> or <a href="{{ url_for('contact') }}"><u>contact us</u></a>.</p>
+      </section>
+    </aside>
+  </div>
+</div>
+{% endblock %}

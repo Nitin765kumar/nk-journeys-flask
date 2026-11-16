@@ -1,0 +1,38 @@
+{% extends "admin/base.html" %}
+{% block title %}{{ 'New package' if creating else 'Edit ' ~ v.name }}{% endblock %}
+{% block content %}
+<p><a href="{{ url_for('admin.packages') }}"><u>All packages</u></a></p>
+<h1>{{ 'New package' if creating else 'Edit package' }}</h1>
+{% if errors %}<div class="err" role="alert">{% for e in errors %}{{ e }}{% if not loop.last %}<br>{% endif %}{% endfor %}</div>{% endif %}
+<form class="panel" method="post">
+  {{ csrf_field() }}
+  <div class="row">
+    <div class="f"><label for="id">ID (used in the URL)</label><input id="id" name="id" value="{{ v.id }}"{% if not creating %} readonly{% endif %}></div>
+    <div class="f"><label for="name">Name</label><input id="name" name="name" value="{{ v.name }}"></div>
+  </div>
+  <div class="row">
+    <div class="f"><label for="dest_id">Destination</label>
+      <select id="dest_id" name="dest_id"><option value="">Choose</option>{% for d in destinations %}<option value="{{ d.id }}"{% if d.id == v.dest_id %} selected{% endif %}>{{ d.name }}</option>{% endfor %}</select>
+    </div>
+    <div class="f"><label for="img">Image</label>
+      <select id="img" name="img"><option value="">Choose</option>{% for i in images %}<option{% if i == v.img %} selected{% endif %}>{{ i }}</option>{% endfor %}</select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="f"><label for="days">Days</label><input id="days" name="days" value="{{ v.days }}" inputmode="numeric"></div>
+    <div class="f"><label for="nights">Nights</label><input id="nights" name="nights" value="{{ v.nights }}" inputmode="numeric"></div>
+  </div>
+  <div class="f"><label for="price">Price per adult (rupees)</label><input id="price" name="price" value="{{ v.price }}" inputmode="numeric"></div>
+  <fieldset class="f"><legend>Trip styles</legend>
+    <div class="chips">{% for key, label in categories %}<label class="check"><input type="checkbox" name="cats" value="{{ key }}"{% if key in v.cats %} checked{% endif %}> {{ label }}</label>{% endfor %}</div>
+  </fieldset>
+  <div class="f"><label for="summary">Summary</label><input id="summary" name="summary" value="{{ v.summary }}"></div>
+  <div class="f"><label for="highlights">Highlights (one per line)</label><textarea id="highlights" name="highlights">{{ v.highlights_text }}</textarea></div>
+  <div class="f"><label for="itinerary">Itinerary (one day per line, as Title | description)</label><textarea id="itinerary" name="itinerary" style="height: 180px">{{ v.itinerary_text }}</textarea></div>
+  <div class="chips">
+    <label class="check"><input type="checkbox" name="featured"{% if v.featured %} checked{% endif %}> Show on the home page</label>
+    <label class="check"><input type="checkbox" name="active"{% if v.active %} checked{% endif %}> Visible on the site</label>
+  </div>
+  <button class="btn btn-gold">Save package</button>
+</form>
+{% endblock %}

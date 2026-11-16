@@ -1,0 +1,42 @@
+{% extends "admin/base.html" %}
+{% block title %}Booking {{ b.ref }}{% endblock %}
+{% block content %}
+<p><a href="{{ url_for('admin.bookings') }}"><u>All bookings</u></a></p>
+<h1>Booking {{ b.ref }}</h1>
+<div class="two">
+  <section class="panel">
+    <h2>{{ b.package_name }}</h2>
+    <div class="voucher" style="border: 0; padding: 0"><dl>
+      <dt>Status</dt><dd>{{ b.status }}</dd>
+      <dt>Created</dt><dd>{{ b.created_at|fmt_datetime }}</dd>
+      <dt>Customer</dt><dd>{{ b.name }}</dd>
+      <dt>Phone</dt><dd>{{ b.phone }}</dd>
+      <dt>Email</dt><dd>{{ b.email }}</dd>
+      <dt>City</dt><dd>{{ b.city or '-' }}</dd>
+      <dt>Travel date</dt><dd>{{ b.travel_date|fmt_date }}</dd>
+      <dt>Travellers</dt><dd>{{ travellers|join(', ') }} ({{ b.adults }} adult{{ '' if b.adults == 1 else 's' }}{% if b.children %}, {{ b.children }} child{{ 'ren' if b.children > 1 else '' }}{% endif %})</dd>
+      <dt>Coupon</dt><dd>{{ b.coupon or '-' }}</dd>
+      <dt>Fare</dt><dd>{{ b.base|inr }}{% if b.discount %} − {{ b.discount|inr }}{% endif %} + GST {{ b.gst|inr }} = {{ b.total|inr }}</dd>
+      <dt>Payment plan</dt><dd>{{ 'Pay 30% now, balance later' if b.pay_mode == 'advance' else 'Pay in full' }} ({{ b.pay_now|inr }} now)</dd>
+    </dl></div>
+  </section>
+  <aside>
+    <section class="panel">
+      <h3>Change status</h3>
+      <form method="post" action="{{ url_for('admin.booking_status', booking_id=b.id) }}">
+        {{ csrf_field() }}
+        <div class="f"><label for="status">Status</label>
+          <select id="status" name="status">{% for s in statuses %}<option{% if s == b.status %} selected{% endif %}>{{ s }}</option>{% endfor %}</select>
+        </div>
+        <button class="btn btn-ink btn-block">Save status</button>
+      </form>
+    </section>
+    <section class="panel">
+      <h3>Payments</h3>
+      {% for p in payments %}
+      <p style="margin: 0 0 10px"><b>{{ p.status }}</b>: {{ p.amount|inr }} by {{ p.method }}{% if p.last4 %} ending {{ p.last4 }}{% endif %}<br><small class="mut">{{ p.payment_id }}, {{ p.created_at|fmt_datetime }}{% if p.reason %}<br>{{ p.reason }}{% endif %}</small></p>
+      {% else %}<p class="mut">No payment attempts yet.</p>{% endfor %}
+    </section>
+  </aside>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% from "_macros.html" import dest_card %}
+{% block title %}Destinations | NK Journeys{% endblock %}
+{% block description %}Browse destinations across India by trip style.{% endblock %}
+{% block content %}
+<div class="wrap">
+  <div class="page-h">
+    <h1 style="font-size: clamp(32px, 4vw, 48px)">Destinations</h1>
+    <p>Pick a place to see the trips we offer there.</p>
+  </div>
+  <form class="bar" method="get">
+    {% if cat %}<input type="hidden" name="cat" value="{{ cat }}">{% endif %}
+    <div><label for="dq">Search destinations</label><input id="dq" name="q" value="{{ q }}" placeholder="Kerala, mountains, beaches"></div>
+    <button class="btn btn-ink" style="height: 48px; align-self: end">Search</button>
+  </form>
+  <div class="chips" role="group" aria-label="Trip style">
+    <a class="chip" href="{{ url_with(cat='all') }}"{% if not cat %} aria-current="true"{% endif %}>All trips</a>
+    {% for key, label in categories %}
+    <a class="chip" href="{{ url_with(cat=key) }}"{% if cat == key %} aria-current="true"{% endif %}>{{ label }}</a>
+    {% endfor %}
+  </div>
+  <div class="grid">
+    {% for d in items %}{{ dest_card(d) }}
+    {% else %}
+    <div class="empty" style="grid-column: 1 / -1"><h3>No destination matches that</h3><p>Try a different style or clear the search.</p></div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

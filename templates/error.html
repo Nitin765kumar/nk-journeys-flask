@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} | NK Journeys{% endblock %}
+{% block seo %}<meta name="robots" content="noindex, follow">{% endblock %}
+{% block content %}
+<div class="wrap empty">
+  <p class="meta">Error {{ code }}</p>
+  <h1>{{ title }}</h1>
+  <p>{{ text }}</p>
+  <a class="btn btn-gold" href="{{ url_for('home') }}">Go to home</a>
+  <a class="btn btn-line" href="{{ url_for('packages') }}" style="margin-left: 10px">Browse packages</a>
+</div>
+{% endblock %}
