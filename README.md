@@ -1,5 +1,7 @@
 # NK Journeys (Flask edition)
 
+
+**Live demo:** https://nk-journeys-flask.onrender.com (free hosting: the first load can take about a minute, and demo data resets when the service sleeps)
 A full-stack travel booking website built with Flask and SQLite. Visitors browse trips, book, pay through a **simulated** checkout and get a voucher. An admin area manages bookings, enquiries and packages.
 
 > **Demo project.** Payments are simulated. No real money moves and card details are never stored.
