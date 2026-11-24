@@ -13,6 +13,7 @@ import click
 from dotenv import load_dotenv
 from flask import (Flask, Response, abort, current_app, flash, g, redirect, render_template,
                    request, session, url_for)
+from werkzeug.middleware.proxy_fix import ProxyFix
 from werkzeug.security import check_password_hash
 
 import accounts
@@ -20,6 +21,7 @@ import catalog
 import db
 import payments
 import pricing
+import throttle
 from admin import bp as admin_bp
 from helpers import (CATEGORIES, DEFAULT_EXCLUSIONS, DEFAULT_INCLUSIONS, EMAIL_RE, PHONE_RE,
                      clamp_int, fmt_date, fmt_datetime, inr, inr_rupees, new_ref)
@@ -29,6 +31,19 @@ NAV_LINKS = [("home", "Home"), ("destinations", "Destinations"), ("packages", "P
 PAGES = {"about": "/about", "support": "/support", "privacy": "/privacy", "terms": "/terms",
          "cancellation": "/cancellation", "payment_policy": "/payment-policy"}
 MIN_DAYS_AHEAD = 7
+
+# Only our own scripts run. Styles may be inline (the templates use style attributes) and Google Fonts is allowed.
+CSP = "; ".join([
+    "default-src 'self'",
+    "img-src 'self'",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src https://fonts.gstatic.com",
+    "script-src 'self'",
+    "form-action 'self'",
+    "base-uri 'self'",
+    "object-src 'none'",
+    "frame-ancestors 'none'",
+])
 
 
 def create_app(test_config=None):
@@ -44,6 +59,8 @@ def create_app(test_config=None):
         SESSION_COOKIE_SECURE=os.environ.get("SESSION_COOKIE_SECURE") == "1",
         MAX_CONTENT_LENGTH=64 * 1024,
         SEND_FILE_MAX_AGE_DEFAULT=timedelta(days=30),    # browsers keep CSS, JS and photos for a month
+        PERMANENT_SESSION_LIFETIME=timedelta(days=14),   # a signed login cookie stops working after this
+        TRUST_PROXY=os.environ.get("TRUST_PROXY") == "1",
     )
     if test_config:
         app.config.update(test_config)
@@ -52,6 +69,11 @@ def create_app(test_config=None):
             app.config["SECRET_KEY"] = "dev-only-secret-key"
         else:
             raise RuntimeError("Set the SECRET_KEY environment variable (see .env.example).")
+
+    if app.config["TRUST_PROXY"]:
+        # Behind Render's proxy the real visitor IP and the https scheme arrive in X-Forwarded-* headers.
+        # Without this every visitor looks like the same address and the login limits would hit everyone.
+        app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
 
     app.teardown_appcontext(db.close_db)
     db.init_db(app)
@@ -124,6 +146,9 @@ def register_security(app):
         response.headers.setdefault("X-Content-Type-Options", "nosniff")
         response.headers.setdefault("X-Frame-Options", "SAMEORIGIN")
         response.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
+        response.headers.setdefault("Content-Security-Policy", CSP)
+        if request.is_secure:
+            response.headers.setdefault("Strict-Transport-Security", "max-age=31536000")
         return response
 
 
@@ -138,6 +163,10 @@ def register_errors(app):
     @app.errorhandler(404)
     def not_found(e):
         return show(404, "We could not find that page", "The link may be old or mistyped.")
+
+    @app.errorhandler(429)
+    def too_many(e):
+        return show(429, "Too many requests", getattr(e, "description", "Please slow down and try again later."))
 
     @app.errorhandler(413)
     def too_large(e):
@@ -281,6 +310,7 @@ def register_routes(app):
         item = catalog.get_package(package_id) or abort(404)
         errors = []
         if request.method == "POST":
+            throttle.rate_limit("book", 20)
             values, errors = parse_booking_form(request.form)
             if not errors:
                 return redirect(url_for("pay", token=create_booking(item, values, g.user["id"] if g.user else None)))
@@ -333,11 +363,16 @@ def register_routes(app):
 
     @app.post("/track")
     def track():
+        key = ("track", request.remote_addr or "unknown")
+        if throttle.blocked(key):
+            flash("Too many attempts. Please try again in a few minutes.", "error")
+            return redirect(url_for("support") + "#track")
         ref = request.form.get("ref", "").strip().upper()
         phone = request.form.get("phone", "").strip()
         row = db.query("SELECT token, phone, status FROM bookings WHERE ref = ?", (ref,), one=True)
         if row and hmac.compare_digest(row["phone"], phone):
             return redirect(url_for("voucher", token=row["token"]))
+        throttle.fail(key)
         flash("No booking matches that ID and mobile number. Check both and try again.", "error")
         return redirect(url_for("support") + "#track")
 
@@ -347,6 +382,7 @@ def register_routes(app):
                 "travel_when": "", "message": ""}
         trips = ["Custom trip"] + [p["name"] for p in catalog.search_packages()]
         if request.method == "POST":
+            throttle.rate_limit("contact", 10)
             form = {k: request.form.get(k, "").strip() for k in form}
             errors = []
             if not 2 <= len(form["name"]) <= 80:

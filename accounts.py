@@ -57,6 +57,7 @@ def register():
     form = {"name": "", "email": "", "phone": ""}
     errors = []
     if request.method == "POST":
+        throttle.rate_limit("register", 10)
         form = {k: request.form.get(k, "").strip() for k in form}
         form["email"] = form["email"].lower()
         password, confirm = request.form.get("password", ""), request.form.get("confirm", "")

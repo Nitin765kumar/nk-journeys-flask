@@ -19,3 +19,5 @@ services:
         sync: false          # for example https://nk-journeys.onrender.com
       - key: SESSION_COOKIE_SECURE
         value: "1"
+      - key: TRUST_PROXY
+        value: "1"          # Render sits in front of the app; trust its forwarded headers

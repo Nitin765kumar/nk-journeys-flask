@@ -5,6 +5,7 @@ Log in at /admin/login. The admin account comes from ADMIN_USERNAME / ADMIN_PASS
 import json
 import os
 import re
+import time
 from functools import wraps
 
 from flask import (Blueprint, abort, current_app, flash, redirect, render_template,
@@ -19,12 +20,14 @@ from helpers import (BOOKING_STATUSES, CATEGORIES, CATEGORY_KEYS, ENQUIRY_STATUS
 
 bp = Blueprint("admin", __name__)
 SLUG_RE = re.compile(r"[a-z0-9][a-z0-9-]{2,40}")
+ADMIN_SESSION_SECONDS = 2 * 60 * 60      # an admin has to log in again after two hours
 
 
 def login_required(view):
     @wraps(view)
     def wrapped(*args, **kwargs):
-        if not session.get("admin"):
+        if not session.get("admin") or time.time() - session.get("admin_at", 0) > ADMIN_SESSION_SECONDS:
+            session.pop("admin", None)
             return redirect(url_for("admin.login", next=request.path))
         return view(*args, **kwargs)
     return wrapped
@@ -43,6 +46,7 @@ def login():
             throttle.reset(("admin", ip))
             session.clear()                       # fresh session after login
             session["admin"] = row["username"]
+            session["admin_at"] = int(time.time())
             target = request.args.get("next", "")
             return redirect(target if target.startswith("/admin") else url_for("admin.dashboard"))
         throttle.fail(("admin", ip))

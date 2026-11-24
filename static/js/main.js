@@ -7,6 +7,9 @@
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* Google Fonts is loaded as a low-priority stylesheet and switched on here, so it never blocks the first paint. */
+  $$('link[data-fonts]').forEach((link) => { link.media = 'all'; });
+
   /* ---------- Navigation: mobile menu and shadow after scrolling ---------- */
   const nav = $('.nav');
   const menuButton = $('.nav-btn');

@@ -81,20 +81,33 @@ tests/          Automated tests
 
 1. Push this folder to a new GitHub repository, for example `nk-journeys-flask`.
 2. On Render, create a **Web Service** from the repository (or use the included `render.yaml` as a Blueprint).
-3. Set the environment variables: `SECRET_KEY` (a long random string), `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `SITE_URL` (your Render URL) and `SESSION_COOKIE_SECURE=1`.
+3. Set the environment variables: `SECRET_KEY` (a long random string), `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `SITE_URL` (your Render URL), `SESSION_COOKIE_SECURE=1` and `TRUST_PROXY=1`.
 4. Start command: `gunicorn "app:create_app()" --workers 1 --bind 0.0.0.0:$PORT`.
 
 **Important about data:** SQLite stores everything in one file. On Render's free plan the disk is temporary, so bookings and enquiries can disappear when the service restarts or redeploys. The packages come back because they are reloaded from `data/seed.json`. To keep bookings you need a persistent disk or a hosted database such as Postgres. Check Render's current plans and documentation, as they change.
 
 ## Security notes
 
-- Customer and admin passwords are hashed. Customer emails are **not verified** in this demo, which is why guest bookings are never linked to an account automatically.
-- Passwords are hashed. The admin account comes from environment variables, never from the code.
-- Every form has a CSRF token. Cookies are `HttpOnly` and `SameSite=Lax`, and `Secure` when `SESSION_COOKIE_SECURE=1`.
-- Admin and customer logins are limited to five failed attempts per fifteen minutes. A customer login never opens the admin area, and a login redirect only follows links that stay on this site.
-- An older database is upgraded automatically when the app starts (a `user_id` column is added to bookings).
-- All SQL uses placeholders. Sort orders come from a whitelist. Package images must be files from `static/img`.
-- Templates escape user text, so a name like `<script>` is shown as text.
+What is in place:
+
+- **HTTPS** comes from the host (GitHub Pages and Render both issue free certificates). Cookies are `HttpOnly`, `SameSite=Lax` and `Secure` when `SESSION_COOKIE_SECURE=1`. HSTS is sent over HTTPS.
+- **Passwords** (customers and admin) are hashed, never stored as text. The admin account comes from environment variables, not from the code. Customer emails are **not verified** in this demo, so guest bookings are never linked to an account automatically.
+- **Every form has a CSRF token.** All SQL uses placeholders. Templates escape user text.
+- **A Content Security Policy** allows only our own scripts, and there is no inline JavaScript. Framing is blocked and `X-Content-Type-Options` is set.
+- **Limits:** five failed logins per fifteen minutes (admin and customers, per visitor address), and hourly limits on the booking, contact, sign-up and track-booking forms. Admin sessions end after two hours and customer login cookies after fourteen days.
+- **Behind Render's proxy** set `TRUST_PROXY=1`, so each visitor is counted by their real address and not by the proxy's.
+- **Private links:** vouchers and payment pages use long random tokens. Tracking a booking needs the ID and the mobile number.
+- **Card details are never stored**, only the last four digits. Payments here are simulated.
+- Package images must be files from `static/img`, and the sort order comes from a whitelist.
+
+What is not covered (know the limits):
+
+- No email verification, password reset or two-factor login for the admin.
+- No CAPTCHA, so determined bots can still send junk through the forms, only slowly.
+- No monitoring, alerts or backups. On Render's free plan the SQLite data is temporary.
+- Fonts load from Google Fonts, which means Google sees visitors' IP addresses. Hosting the fonts yourself would remove that.
+- A real payment flow needs a certified gateway (the gateway handles card data) and a lawyer-reviewed privacy policy. The policies here are sample text.
+- Keep dependencies updated, turn on GitHub's Dependabot alerts, and use two-factor login on your GitHub and Render accounts.
 
 ## Ideas for next steps
 

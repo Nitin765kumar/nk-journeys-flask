@@ -91,12 +91,15 @@ class PublicPages(AppTestCase):
         response = self.client.get("/static/css/nkj.css")
         self.assertIn("max-age=2592000", response.headers["Cache-Control"])
         self.assertEqual(response.status_code, 200)
+        response.close()
 
     def test_photos_are_responsive(self):
         page = self.client.get("/packages").get_data(as_text=True)
         self.assertIn("kerala-480.webp 480w", page)
         for name in ("kerala-480.webp", "kerala-800.webp", "kerala-1200.webp", "founder-264.webp"):
-            self.assertEqual(self.client.get(f"/static/img/{name}").status_code, 200, name)
+            response = self.client.get(f"/static/img/{name}")
+            self.assertEqual(response.status_code, 200, name)
+            response.close()
 
     def test_home_has_seo_tags(self):
         html = self.client.get("/").get_data(as_text=True)
@@ -338,6 +341,57 @@ class Accounts(AppTestCase):
         create_app({"TESTING": True, "SECRET_KEY": "x", "DATABASE_PATH": path})
         columns = [r[1] for r in sqlite3.connect(path).execute("PRAGMA table_info(bookings)")]
         self.assertIn("user_id", columns)
+
+
+class Hardening(AppTestCase):
+    def test_csp_and_no_inline_scripts(self):
+        response = self.client.get("/")
+        policy = response.headers["Content-Security-Policy"]
+        for part in ("script-src 'self'", "frame-ancestors 'none'", "object-src 'none'", "form-action 'self'"):
+            self.assertIn(part, policy)
+        for url in ("/", "/packages", "/packages/kerala-6d", "/book/kerala-6d", "/contact", "/login", "/register", "/about", "/admin/login"):
+            html = self.client.get(url).get_data(as_text=True)
+            self.assertNotIn("onload=", html, url)
+            self.assertNotIn("onerror=", html, url)
+            self.assertNotRegex(html, r"<script(?![^>]*\bsrc=)", url)          # every script is an external file
+
+    def test_hsts_only_over_https(self):
+        self.assertNotIn("Strict-Transport-Security", self.client.get("/").headers)
+        self.assertIn("Strict-Transport-Security", self.client.get("/", base_url="https://localhost").headers)
+
+    def test_contact_form_is_rate_limited(self):
+        data = {"name": "Spam", "email": "spam@example.com", "message": "short"}
+        codes = [self.post("/contact", data).status_code for _ in range(11)]
+        self.assertEqual(codes[:10], [400] * 10)
+        self.assertEqual(codes[10], 429)
+
+    def test_track_is_rate_limited(self):
+        for _ in range(5):
+            self.post("/track", {"ref": "NKJ000000", "phone": "9999999999"})
+        page = self.post("/track", {"ref": "NKJ000000", "phone": "9999999999"}, follow_redirects=True)
+        self.assertIn("Too many attempts", page.get_data(as_text=True))
+
+    def test_admin_session_expires(self):
+        self.admin_login()
+        self.assertEqual(self.client.get("/admin/").status_code, 200)
+        with self.client.session_transaction() as s:
+            s["admin_at"] -= 3 * 60 * 60
+        self.assertEqual(self.client.get("/admin/").status_code, 302)
+
+    def test_behind_a_proxy_each_visitor_has_their_own_limit(self):
+        proxied = create_app({"TESTING": True, "SECRET_KEY": "x", "ADMIN_PASSWORD": "pw-for-tests", "TRUST_PROXY": True,
+                              "DATABASE_PATH": os.path.join(self.tmp.name, "proxy.db")})
+        client = proxied.test_client()
+
+        def login(ip, password):
+            with client.session_transaction() as s:
+                s["_csrf"] = "t"
+            return client.post("/admin/login", data={"username": "admin", "password": password, "csrf_token": "t"},
+                               headers={"X-Forwarded-For": ip}).status_code
+        for _ in range(5):
+            self.assertEqual(login("1.1.1.1", "wrong"), 401)
+        self.assertEqual(login("1.1.1.1", "pw-for-tests"), 429)       # the attacker is locked out
+        self.assertEqual(login("2.2.2.2", "pw-for-tests"), 302)       # the real admin is not
 
 
 class Contact(AppTestCase):
